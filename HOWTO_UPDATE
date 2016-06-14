@@ -1,0 +1,32 @@
+The structure of mc_hms_single is now very similar to SIMC, and most
+of the code can be taken from the SIMC version of the spectrometer MCs.
+The single-arm specific files you need are:
+
+  mc_hms_single.f		!main routine
+  Makefile			!the makefile
+  simulate.inc			!single arm version of SIMC's simulate.inc
+				! (declares some decay-related variables).
+  infiles/<filename>.inp	!An input file.
+
+
+The other fortran, include, and data files are copies of the SIMC versions (do
+NOT copy over the SIMC version of simulate.inc).  You will need the following
+routines:
+  constants.inc
+  spectrometers.inc
+  gauss1.f
+  mt19937.f
+  loren.f
+  hms/*
+  shared/*
+
+
+To convert to another spectrometer, you will need to do the following:
+
+  1. Change the hSTOP.* variables to match the struct_<spec>.inc structure.
+  2. Modify multiple scattering which is hardwired in main routine.
+  3. Change ntuple variable names, if desired.
+
+
+TO DO:	Fast raster (currently set to zero for call to mc_hms)
+	Transformation from target to TRANSPORT system assumes spec on right(left)
