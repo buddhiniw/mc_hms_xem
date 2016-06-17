@@ -1,0 +1,89 @@
+------------------------------------------------------------------------
+  MC_HMS_XEM  -  Hall C single arm montecarlo for inclusive reactions
+------------------------------------------------------------------------
+
+mc_hms_single.f is a stripped down and modified version of the SIMC (Hall C Monte Carlo) to 
+perform single arm monte carlo for inclusive reactions.
+
+mc_hms_single is setup to simulate the optics (using COSY models) and apertures of the Hall C High Momentum Spectrometer (HMS). 
+It includes:
+* Radiative effects, multiple scattering, ionization energy loss and
+  particle decay are included
+* Simple presecriptions are available for Final State Interactions,
+  Coulomb Corrections and other effects.
+
+THE STRUCTURE:
+
+The structure of mc_hms_single is very similar to SIMC, and most
+of the code are taken from the SIMC version of the spectrometer MCs.
+The single-arm specific files are:
+
+  mc_hms_single.f		!main routine
+  Makefile			!the makefile
+  simulate.inc			!single arm version of SIMC's simulate.inc
+				! (declares some decay-related variables).
+  infiles/<filename>.inp	!An input file.
+
+
+The other fortran, include, and data files are copies of the SIMC versions (do
+NOT copy over the SIMC version of simulate.inc).  You will need the following
+routines:
+  constants.inc
+  spectrometers.inc
+  gauss1.f
+  mt19937.f
+  loren.f
+  hms/*
+  shared/*
+
+The outputs are stored in:
+    outfiles/infile_name.out
+    
+The hbook file is saved in:
+    worksim/infile_name.rzdat
+
+
+To convert mc_hms_single to be used for another spectrometer, you will need to do the following:
+
+  1. Change the hSTOP.* variables to match the struct_<spec>.inc structure found inside hms_simc/ folder
+  2. Modify multiple scattering which is hardwired in main routine.
+  3. Change ntuple variable names, if desired.
+
+
+
+TO USE:
+
+Make sure you have the correct infiles and the worksim files in your directories.
+Compile using gmake
+Do
+./mc_hms_single
+ Enter input filename (assumed to be in infiles dir)
+18deg_carbon_5100    
+ open infiles
+ infiles/18deg_carbon_5100.inp                                                  
+..
+..
+
+
+NTUPLE VARIABLES:
+
+    hsxfp Focal plane vertical position
+    hsyfp Focal plane horizontal position
+    hsxpfp Focal plane vertical angle=dx/dz
+    hsypfp Focal plane horizontal angle=dy/dz
+    hsztari Initial random position along the target
+    hsytari Initial y (horizontal) position at the z=0 plane perpendicular to central ray of SHMS
+    hsdeltai Initial random delta = (p-pcent)/pcent
+    hsyptari Initial random horizontal angle=dy/dz
+    hsxptari Initial random vertical angle=dx/dz
+    hsztar Reconstructed position along the target
+    hsytar Reconstructed
+    hsdelta Reconstructed
+    hsyptar Reconstructed
+    hsxptar Reconstructed
+    hsxtari Initial x (vertical) position at the z=0 plane perpendicular to central ray of SHMS
+    yrast Initial random vertical raster position
+    xsnum sieve slit vertical hole number ( hole number at front sieve if use_front_sieve = true)
+    ysnum sieve slit horizontal hole number ( hole number at front sieve if use_front_sieve = true)
+    xsieve sieve slit vertical position (cm) ( position at front sieve if use_front_sieve = true)
+    ysieve sieve slit horizontal position (cm) ( position at front sieve if use_front_sieve = true)
